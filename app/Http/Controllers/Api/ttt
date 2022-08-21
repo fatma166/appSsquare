@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\Api\AuthUserRequest;
+use App\Models\User;
+use Validator;
+use Illuminate\Support\Facades\Hash;
+
+class AuthUserController extends Controller
+{
+
+
+    public function register(Request $request) {
+
+
+
+            // validate form fields
+            $req=Validator::make($request->all(),[
+                'name'               =>      'required',
+                'email'             =>      'required|email',
+                'password'          =>      'required|min:6',
+                'confirm_password'  =>      'required|same:password',
+                'phone'             =>      'required',
+                'role_id'              =>       'required'
+
+            ]);
+
+
+
+        if ($req->passes()) {
+
+                // if validation success then create an input array
+                $inputArray      =           array(
+                    'name'              =>      $request->name,
+                    'email'             =>      $request->email,
+                    'password'          =>      Hash::make($request->password),
+                    'phone'             =>      $request->phone,
+
+                    'role_id'           =>     $request->id
+
+
+
+                );
+                // print_r($inputArray);exit;
+
+            // register user
+            $user= User::create($inputArray);
+
+
+                    return response()->json(['success'=>'added successfully.']);
+                }else{
+                    return response()->json(['error'=>$req->errors()->all()]);
+
+
+                }
+
+
+
+    }
+    //
+    public function login(AuthUserRequest $request){
+
+        $validated = $request->validated();
+
+        $token =Auth::attempt($validated);
+        print_r($token);exit;
+        if (!Auth::attempt($validated)) {
+            return response(['message' => 'inccorrect data'],'401');
+        }
+
+
+        $token =auth()->user()->createToken('API Token')->accessToken;
+
+        return response(['user' => auth()->user(), 'token' => $token]);
+    }
+}

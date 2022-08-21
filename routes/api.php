@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::namespace('Api')->group (function() {
     route::post('login_','AuthUserController@login')->name('login_');
+    route::post('register','AuthUserController@register')->name('register');
     Route::group(['prefix' => 'leaverequests'], function () {
         Route::POST('/request', "LeaveRequestController@Request");
         Route::get('/', "LeaveRequestController@Index");

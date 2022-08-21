@@ -31,7 +31,7 @@ class LeaveRequestController extends Controller
 
 
         $validated=$request->validated();
-
+        print_r($request->user()); exit;
 
         $requested_leave_time=date_diff(date_create(),date_create($validated['leave_to']));
         $requested_leave_days=$requested_leave_time->d+1;//$requested_leave_time->d==0?

@@ -12,6 +12,7 @@
         "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "php-open-source-saver/jwt-auth": "^1.4",
         "reliese/laravel": "^1.1",
         "tymon/jwt-auth": "1.0.*"
     },
