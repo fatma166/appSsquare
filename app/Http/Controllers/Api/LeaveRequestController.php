@@ -5,6 +5,7 @@ use App\Library\NotificationManager;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 class LeaveRequestController extends Controller
 {
     //
@@ -50,6 +51,7 @@ class LeaveRequestController extends Controller
         $leaveRequest=$request->user()->leave_requests()->save($leaveRequest);
 
         $NotificationManager=new NotificationManager();
+
         $NotificationManager->build($leaveRequest->id,"make_leave",$request);
         $NotificationManager->commit();
 
