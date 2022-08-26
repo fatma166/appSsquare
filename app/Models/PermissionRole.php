@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class PermissionRole
- * 
+ *
  * @property int $role_id
  * @property int $permission_id
- * 
+ *
  * @property Permission $permission
  * @property Role $role
  *

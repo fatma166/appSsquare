@@ -13,23 +13,28 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['middleware'=>'auth'],function($router){
 Route::namespace('Api')->group (function() {
-    route::post('login_','AuthUserController@login')->name('login_');
-    route::post('register','AuthUserController@register')->name('register');
+    route::post('login','AuthUserController@login')->name('login')->withoutMiddleware([auth::class]);
+    route::post('register','AuthUserController@register')->name('register')->withoutMiddleware([auth::class]);
+
     Route::group(['prefix' => 'leaverequests'], function () {
-        Route::POST('/request', "LeaveRequestController@Request");
-        Route::get('/', "LeaveRequestController@Index");
-        Route::get('/{id?}', "LeaveRequestController@Index");
+        Route::POST('/request', "LeaveRequestController@Request")->name('leave-store');
+
+        Route::get('/{id?}', "LeaveRequestController@Index")->name('leave-index');
+        Route::post('requestAction', "LeaveRequestController@requestAction")->name('leave-update');
 
 
     });
-
+    Route::group(['prefix' => 'notification'], function () {
+        Route::post('index', "NotificationController@change_status")->name('notify-update');
+    });
 });
-Route::group(['middleware'=>'auth'],function($router){
+
 
 
 
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-   // return $request->user();
+    // return $request->user();
 });

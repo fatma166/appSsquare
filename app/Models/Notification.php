@@ -42,7 +42,7 @@ class Notification extends Model
 		'to',
 		'type',
 		'status',
-
+        'data_id'
 	];
 
 	public function user()

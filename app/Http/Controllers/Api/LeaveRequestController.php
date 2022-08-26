@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Library\NotificationManager;
+use App\Libarary\NotificationManager;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\LeaveRequest;
 
 class LeaveRequestController extends Controller
 {
     //
-    public function Index(Request $request,$id=null){
+    public function Index(Request $request,$id=null,$start=0,$end){
 
 
 
@@ -17,7 +17,7 @@ class LeaveRequestController extends Controller
             return   $request->user()->leave_requests()->find($id);
         }
 
-        return $request->user()->leave_requests()->orderBy('created_at','desc')->get();
+        return $request->user()->leave_requests()->limit($end,$start)->orderBy('created_at','desc')->get();
     }
 
 
@@ -32,9 +32,9 @@ class LeaveRequestController extends Controller
 
 
         $validated=$request->validated();
-        print_r($request->user()); exit;
+       // print_r($request->user()); exit;
 
-        $requested_leave_time=date_diff(date_create(),date_create($validated['leave_to']));
+        $requested_leave_time=date_diff(date_create($validated['leave_from']),date_create($validated['leave_to']));
         $requested_leave_days=$requested_leave_time->d+1;//$requested_leave_time->d==0?
         $requested_leave_hours=$requested_leave_time->h;
 
@@ -47,16 +47,41 @@ class LeaveRequestController extends Controller
 
         $check_exist=$this->checkExistRequestBefore($request,$leaveRequest->leave_from,$leaveRequest->leave_to);
 
-        if(!empty($check_exist))return response()->json(['msg' => "LEAVE_REQUEST_EXIST_BEFORE"], 422);
+        if(!empty($check_exist))return response()->json([
+            'status' => 'error',
+            'message' => 'Leave existes before',
+        ], 403);
         $leaveRequest=$request->user()->leave_requests()->save($leaveRequest);
 
         $NotificationManager=new NotificationManager();
 
-        $NotificationManager->build($leaveRequest->id,"make_leave",$request);
+        $NotificationManager->build($leaveRequest->id,"pending",$request);
         $NotificationManager->commit();
 
         $data["msg"]="sucess";
         return   $data;
 
+    }
+    public function requestAction(Request $request){
+
+        $leave_id=$request->leave_id;
+        $status=$request->status;
+       $updated= LeaveRequest::where('id',$leave_id)->update(['status'=>$status]);
+       if(!$updated){
+           return response()->json([
+               'status' => 'failed',
+               'data' =>"",
+
+           ],400);
+       }
+        $NotificationManager=new NotificationManager();
+
+        $NotificationManager->build($leave_id,$status,$request);
+        $NotificationManager->commit();
+        return response()->json([
+            'status' => 'success',
+            'data' =>"",
+
+             ],200);
     }
 }

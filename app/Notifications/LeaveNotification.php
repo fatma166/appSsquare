@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class LeaveNotification extends Notification
 {
     use Queueable;
-
+    private $leaveSetting;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($leaveSetting)
     {
         //
+        $this->leaveSetting=$leaveSetting;
     }
 
     /**
@@ -41,9 +42,10 @@ class LeaveNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+
+                ->line($this->leaveSetting['body'])
+                ->action($this->leaveSetting['leaveText'], $this->leaveSetting['leaveUrl'])
+                ->line($this->leaveSetting['thanks']);
     }
 
     /**

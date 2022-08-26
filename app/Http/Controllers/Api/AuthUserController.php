@@ -1,29 +1,29 @@
 <?php
 namespace App\Http\Controllers\Api;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
 use App\Http\Requests\Api\AuthUserRequest;
 use App\Http\Requests\Api\RegisterRequest;
-use App\Models\User;
 use Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthUserController extends Controller
 {
 
-public function __construct()
-{
-$this->middleware('auth:api', ['except' => ['login','register']]);
-}
 
     public function login(AuthUserRequest $request){
 
-        $validated = $request->validated();
+
+        $validated= $request->validated();
+
 
         $token =Auth::attempt($validated);
 
-        if (!Auth::attempt($validated)) {
+        if (!$token) {
 
                 return response()->json([
                 'status' => 'error',
@@ -39,7 +39,7 @@ $this->middleware('auth:api', ['except' => ['login','register']]);
                 'token' => $token,
                 'type' => 'bearer',
                 ]
-        ]);
+        ],200);
 
     }
 
@@ -59,7 +59,7 @@ $this->middleware('auth:api', ['except' => ['login','register']]);
                     'token' => $token,
                     'type' => 'bearer',
                     ]
-            ]);
+            ],200);
         }
 
         public function logout()
@@ -80,7 +80,7 @@ $this->middleware('auth:api', ['except' => ['login','register']]);
             'token' => Auth::refresh(),
             'type' => 'bearer',
             ]
-            ]);
+            ],200);
     }
 
 }

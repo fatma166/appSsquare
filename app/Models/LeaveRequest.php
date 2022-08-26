@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class LeaveRequest
- * 
+ *
  * @property int $id
  * @property Carbon $date
  * @property int $user_id
  * @property string $status
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * 
+ *
  * @property User $user
  *
  * @package App\Models
@@ -38,7 +38,13 @@ class LeaveRequest extends Model
 	protected $fillable = [
 		'date',
 		'user_id',
-		'status'
+        'leave_from',
+        'leave_to',
+		'status',
+        'num_hours',
+        'days'
+
+
 	];
 
 	public function user()

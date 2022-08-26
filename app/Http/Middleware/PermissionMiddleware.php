@@ -23,8 +23,8 @@ class PermissionMiddleware
     public function handle(Request $request, Closure $next)
     {
         $route_name=Route::currentRouteName();
-
-        $role_id=Auth::user()->role_id;
+//print_r(Auth::guard('api')->user()); exit;
+        $role_id=Auth::guard('api')->user()->role_id;
         $roles=Auth::user()->role()->first();
         //DB::enableQueryLog();
         $key_id=Permission::SELECT('permissions.id')->where('key', 'like',$route_name)
@@ -53,13 +53,13 @@ class PermissionMiddleware
         }
 
 
-        if ((!empty($permissions))){
-
-            return $next($request);
-        }else{
-            return redirect()->back();
-
+        if ((empty($permissions))) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'not have permission',
+            ], 403);
         }
+            return $next($request);
 
 
     }

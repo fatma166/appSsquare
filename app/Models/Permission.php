@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Permission
- * 
+ *
  * @property int $id
  * @property string $key
  * @property string $table_name
  * @property int $type
- * 
+ *
  * @property Collection|Role[] $roles
  *
  * @package App\Models

@@ -1,5 +1,5 @@
 <?php
-namespace App\Library;
+namespace App\Libarary;
 
 use App\Models\Notification;
 use App\Models\User;
@@ -12,25 +12,33 @@ class NotificationManager
     protected $notification;
     protected $notification1;
 
-    public function build($data_id,$type, $request)
+
+
+    public function build($data_id,$type,$request)
     {
+
         $user = Auth::guard('api')->user();
-        $manger=$user->parent_manger;
+
+        $manger=$user->manger_Parent;
+
         $manger_details=User::find($manger);
-        $hr=$manger->parent_manger;
+        $hr=$manger_details->manger_Parent;
         $notification_content = $this->format_notification($type, $user);
-        $notification = new notification();
+       // $notification = new Notification;
+        $notification= new \stdClass();
         $notification->title = $notification_content["title"];
         $notification->message = $notification_content["message"];
         $notification->type = $type;
         $notification->from = $user->id;
         $notification->to = $manger;
-       // $notification->data_id=$data_id;
+        $notification->data_id=$data_id;
         $this->notification = $notification;
 
-        if($type==accepted){
+        if($type=="accept"){
+            $notification1= new \stdClass();
             $notification1->from = $manger;
             $notification1->to = $hr;
+            $this->notification1=$notification1;
 
         }
 
@@ -41,14 +49,28 @@ class NotificationManager
         if (!$this->notification) {
             throw new \Exception("Build Notification First");
         }
-        $this->notification->save();
-        $this->notify(new LeaveNotification($this->notification));
-        if(!empty($this->notification1)){
+        $nof=Notification::create( json_decode(json_encode($this->notification), true));
+       //$nof= $this->notification->save();
+       $from_user_notfy=auth::user()->find($this->notification->from) ;
+        $notfy_setting = [
+            'title' => $this->notification->title,
+            'body' => 'You received an leave request.',
+            'thanks' => 'Thank you',
+            'leaveText' => 'leave request from employee '.$from_user_notfy->name,
+            'leaveUrl' => route('leave-index',$this->notification->data_id),
+            'leave_id' => $this->notification->data_id
+        ];
+
+
+        Auth::guard('api')->user()->notify(new LeaveNotification($notfy_setting));
+
+        if($nof&&!empty($this->notification1)){
 
 
           $this->notification->from=$this->notification1->from;
           $this->notification->to=$this->notification1->to;
-          $this->notification->save();
+          //$this->notification->save();
+            Notification::create( json_decode(json_encode($this->notification), true));
         }
 
 
@@ -65,15 +87,15 @@ class NotificationManager
     {
         $data=array();
         switch ($type) {
-            case "make_leave":
+            case "pending":
                 $data["title"] = "طلب اذن";
                 $data["message"] = "الموظف " . $user->name . " طالب اذن مغادرة";
                 break;
-            case "refused":
+            case "refuse":
                 $data["title"] = "تم رفض الاذن";
                 $data["message"] = "الموظف " . $user->name . "تم رفض الاذن";
                 break;
-            case "accepted":
+            case "accept":
                 $data["title"] = "تم الموافقه";
                 $data["message"] = "الموظف " . $user->name . "تم الموافقه";
                 break;
