@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware'=>'auth'],function($router){
+Route::group(['middleware'=>['auth','permission']],function($router){
 Route::namespace('Api')->group (function() {
-    route::post('login','AuthUserController@login')->name('login')->withoutMiddleware([auth::class]);
-    route::post('register','AuthUserController@register')->name('register')->withoutMiddleware([auth::class]);
+    route::post('login','AuthUserController@login')->name('login')->withoutMiddleware([auth::class,permission::class]);
+    route::post('register','AuthUserController@register')->name('register')->withoutMiddleware([auth::class,permission::class]);
 
     Route::group(['prefix' => 'leaverequests'], function () {
         Route::POST('/request', "LeaveRequestController@Request")->name('leave-store');
@@ -24,10 +24,11 @@ Route::namespace('Api')->group (function() {
         Route::get('/{id?}', "LeaveRequestController@Index")->name('leave-index');
         Route::post('requestAction', "LeaveRequestController@requestAction")->name('leave-update');
 
-
     });
+
     Route::group(['prefix' => 'notification'], function () {
-        Route::post('index', "NotificationController@change_status")->name('notify-update');
+        Route::get('index/{id?}', "NotificationController@index")->name('notify-index');
+        Route::post('change_status', "NotificationController@change_status")->name('notify-update');
     });
 });
 

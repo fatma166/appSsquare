@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Models\Permission_role;
+use App\Models\PermissionRole;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +34,7 @@ class PermissionMiddleware
 //print_r($query);exit;
         // print_r($key_id); exit;
         if(!empty( $key_id['id'])){
-            $permissions=Permission_role::/*SELECT('permissions.key')->join('permission_roles','permission_roles.permission_id','=','permissions.id')*/
+            $permissions=PermissionRole::/*SELECT('permissions.key')->join('permission_roles','permission_roles.permission_id','=','permissions.id')*/
 
 
             where('permission_roles.role_id',$role_id)

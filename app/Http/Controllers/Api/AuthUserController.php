@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Api\AuthUserRequest;
 use App\Http\Requests\Api\RegisterRequest;
+
 use Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,7 @@ class AuthUserController extends Controller
         $user = Auth::user();
         return response()->json([
                 'status' => 'success',
-                'data' => $user,
+                'data' =>new UserCollection($user),
                 'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
