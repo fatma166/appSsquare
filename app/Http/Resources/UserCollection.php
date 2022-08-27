@@ -16,7 +16,8 @@ class UserCollection extends ResourceCollection
     {
         return
            [    'id' => $this->id,
-                'role_id' => $this->role_id,
+               'role_id' => RoleResource::collection($this->role_id),
+
                 'manger_Parent' => $this->manger_Parent,
                 'name' => $this->name,
                 'email' => $this->email,

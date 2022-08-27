@@ -24,7 +24,7 @@ class NotificationRequest extends FormRequest
     public function rules()
     {
         return [
-                'status' => 'in:seen,delivered|nullable',
+                'status'=> 'in:seen,delivered|nullable',
 
         ];
     }

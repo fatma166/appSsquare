@@ -9,9 +9,10 @@ use App\Models\LeaveRequest;
 class LeaveRequestController extends Controller
 {
     //
-    public function Index(Request $request,$id=null,$start=0,$end){
+    public function Index(Request $request,$id=null){
 
-
+        $start=$request['start']??0;
+        $end=$request['end'];
 
         if($id){
             return   $request->user()->leave_requests()->find($id);

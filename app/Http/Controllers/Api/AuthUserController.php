@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Api\AuthUserRequest;
 use App\Http\Requests\Api\RegisterRequest;
-
+//use App\Http\Resources\UserCollection;
 use Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,17 +29,17 @@ class AuthUserController extends Controller
                 return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
+                 'data'=>"",
                 ], 401);
         }
 
         $user = Auth::user();
         return response()->json([
                 'status' => 'success',
-                'data' =>new UserCollection($user),
-                'authorisation' => [
+                'data' =>$user,
+                'message'=>'login',
                 'token' => $token,
-                'type' => 'bearer',
-                ]
+
         ],200);
 
     }
@@ -56,10 +56,8 @@ class AuthUserController extends Controller
                     'status' => 'success',
                     'message' => 'User created successfully',
                     'data' => $user,
-                    'authorisation' => [
                     'token' => $token,
-                    'type' => 'bearer',
-                    ]
+
             ],200);
         }
 
@@ -69,7 +67,8 @@ class AuthUserController extends Controller
             return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
-            ]);
+            'data'=>""
+            ],200);
     }
 
     public function refresh()
@@ -77,10 +76,8 @@ class AuthUserController extends Controller
             return response()->json([
             'status' => 'success',
             'data' => Auth::user(),
-            'authorisation' => [
             'token' => Auth::refresh(),
-            'type' => 'bearer',
-            ]
+
             ],200);
     }
 
