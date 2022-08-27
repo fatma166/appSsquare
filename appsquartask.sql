@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 20, 2022 at 05:40 PM
+-- Generation Time: Aug 27, 2022 at 10:32 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -48,11 +48,20 @@ CREATE TABLE `leave_requests` (
   `leave_from` date NOT NULL,
   `leave_to` date NOT NULL,
   `num_hours` float NOT NULL,
+  `days` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `status` enum('accept','refused','','') NOT NULL,
+  `status` enum('accept','refuse','pending') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `leave_requests`
+--
+
+INSERT INTO `leave_requests` (`id`, `leave_from`, `leave_to`, `num_hours`, `days`, `user_id`, `status`, `created_at`, `updated_at`) VALUES
+(16, '2022-08-23', '2022-08-24', 0, 2, 8, 'accept', '2022-08-26 21:19:59', '2022-08-26 19:19:59'),
+(17, '2022-08-27', '2022-08-28', 0, 2, 8, 'accept', '2022-08-27 07:35:06', '2022-08-27 05:35:06');
 
 -- --------------------------------------------------------
 
@@ -104,18 +113,61 @@ CREATE TABLE `notifications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `title`, `message`, `from`, `to`, `type`, `data_id`, `status`, `created_at`) VALUES
+(3, 'طلب اذن', 'الموظف employee طالب اذن مغادرة', 8, 7, 'pending', 15, 'delivered', '2022-08-23 13:44:47'),
+(4, 'طلب اذن', 'الموظف employee طالب اذن مغادرة', 8, 7, 'pending', 16, 'delivered', '2022-08-23 14:02:51'),
+(5, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-25 21:00:05'),
+(6, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:04:18'),
+(7, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:07:30'),
+(8, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-25 21:09:00'),
+(9, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-25 21:09:40'),
+(10, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:11:46'),
+(11, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:11:53'),
+(12, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:12:02'),
+(13, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-25 21:12:31'),
+(14, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-26 19:48:11'),
+(15, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:05:17'),
+(16, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-26 20:05:17'),
+(17, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:36:36'),
+(18, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:37:20'),
+(19, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:48:18'),
+(20, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:52:00'),
+(21, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:54:29'),
+(22, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 20:57:54'),
+(23, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-26 20:57:56'),
+(24, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 16, 'delivered', '2022-08-26 21:19:59'),
+(25, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 16, 'delivered', '2022-08-26 21:20:02'),
+(26, 'طلب اذن', 'الموظف employee طالب اذن مغادرة', 8, 7, 'pending', 17, 'seen', '2022-08-27 07:24:20'),
+(27, 'تم الموافقه', 'الموظف employeeتم الموافقه', 8, 7, 'accept', 17, 'delivered', '2022-08-27 07:35:06'),
+(28, 'تم الموافقه', 'الموظف employeeتم الموافقه', 7, 2, 'accept', 17, 'delivered', '2022-08-27 07:35:09');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permission`
+-- Table structure for table `permissions`
 --
 
-CREATE TABLE `permission` (
+CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
   `key` varchar(200) NOT NULL,
   `table_name` varchar(200) NOT NULL,
   `type` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `key`, `table_name`, `type`) VALUES
+(1, 'leave-store', 'leave_requests', 0),
+(2, 'leave-index', 'leave_requests', 0),
+(3, 'leave-update', 'leave_requests', 0),
+(4, 'notify-index', 'notifications', 0),
+(5, 'notify-update', 'notifications', 0);
 
 -- --------------------------------------------------------
 
@@ -127,6 +179,18 @@ CREATE TABLE `permission_roles` (
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `permission_roles`
+--
+
+INSERT INTO `permission_roles` (`role_id`, `permission_id`) VALUES
+(1, 2),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4),
+(3, 5);
 
 -- --------------------------------------------------------
 
@@ -161,7 +225,6 @@ CREATE TABLE `users` (
   `manger_Parent` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `birth_date` date NOT NULL,
   `email_isverified` tinyint(1) DEFAULT 0,
   `avatar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -183,10 +246,13 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `role_id`, `manger_Parent`, `name`, `email`, `birth_date`, `email_isverified`, `avatar`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `deleted_at`, `phone`, `phone_isverified`, `device_token`, `join_date`, `active`, `device_info`, `last_login`) VALUES
-(1, 2, 0, 'human_resource', 'hr@hr.com', '2022-07-05', 1, NULL, NULL, '$2y$10$N7Kpuc4kkFPkewIH3QF2wuRi5fjGlsaIYMEC0gvhimWph1zCcUzUq', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL),
-(2, 1, 1, 'manger', 'manger@company.com', '2022-05-01', 0, NULL, NULL, '$2y$10$N7Kpuc4kkFPkewIH3QF2wuRi5fjGlsaIYMEC0gvhimWph1zCcUzUq', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL),
-(3, 3, 2, 'employee', 'employee@company.com', '2022-01-03', 0, NULL, NULL, '', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL);
+INSERT INTO `users` (`id`, `role_id`, `manger_Parent`, `name`, `email`, `email_isverified`, `avatar`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `deleted_at`, `phone`, `phone_isverified`, `device_token`, `join_date`, `active`, `device_info`, `last_login`) VALUES
+(1, 2, 0, 'human_resource', 'hr@hr.com', 1, NULL, NULL, '$2y$10$N7Kpuc4kkFPkewIH3QF2wuRi5fjGlsaIYMEC0gvhimWph1zCcUzUq', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL),
+(2, 1, 1, 'hr', 'hr@company.com', 0, NULL, NULL, '$2y$10$N7Kpuc4kkFPkewIH3QF2wuRi5fjGlsaIYMEC0gvhimWph1zCcUzUq', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL),
+(3, 3, 2, 'employee', 'employee@company.com', 0, NULL, NULL, '', NULL, '2022-08-20 11:45:22', '2022-08-20 11:45:22', '2022-08-20 11:45:22', '', 0, '1', '2022-08-20 13:45:22', 1, NULL, NULL),
+(4, NULL, 0, 'manger', 'manger1@manger.com', 0, NULL, NULL, '$2y$10$u3ye5YiSVcfoDZzqltDbseEmsq5kRS5EXGDzcjYjjrtcxGdtOS2jO', '1234', '2022-08-21 09:02:50', '2022-08-21 09:02:50', '2022-08-21 11:02:50', '4546456575', 0, '1', '2022-08-21 13:02:50', 1, NULL, NULL),
+(7, 2, 2, 'manger', 'manger1@manger.com2', 0, NULL, NULL, '123456', NULL, '2022-08-21 10:27:51', '2022-08-21 10:27:51', '2022-08-21 12:27:51', '45464565753', 0, '1', '2022-08-21 14:27:51', 1, NULL, NULL),
+(8, 3, 7, 'employee', 'employee1@employee.com3', 0, NULL, NULL, '$2y$10$N7Kpuc4kkFPkewIH3QF2wuRi5fjGlsaIYMEC0gvhimWph1zCcUzUq', NULL, '2022-08-21 10:49:43', '2022-08-21 10:49:43', '2022-08-21 12:49:43', '45464565752', 0, '1', '2022-08-21 14:49:43', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -222,17 +288,10 @@ ALTER TABLE `notifications`
   ADD KEY `to` (`to`);
 
 --
--- Indexes for table `permission`
+-- Indexes for table `permissions`
 --
-ALTER TABLE `permission`
+ALTER TABLE `permissions`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `permission_roles`
---
-ALTER TABLE `permission_roles`
-  ADD PRIMARY KEY (`role_id`),
-  ADD KEY `permission_index` (`permission_id`);
 
 --
 -- Indexes for table `roles`
@@ -263,7 +322,7 @@ ALTER TABLE `emails`
 -- AUTO_INCREMENT for table `leave_requests`
 --
 ALTER TABLE `leave_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -275,13 +334,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `permission`
+-- AUTO_INCREMENT for table `permissions`
 --
-ALTER TABLE `permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -293,7 +352,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
@@ -318,13 +377,6 @@ ALTER TABLE `leave_requests`
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`from`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`to`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `permission_roles`
---
-ALTER TABLE `permission_roles`
-  ADD CONSTRAINT `permission_index` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
-  ADD CONSTRAINT `role_index` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 --
 -- Constraints for table `users`
